@@ -58,27 +58,37 @@ const SignUp = () => {
       {/* STEP 1 - CUI */}
       {step === 1 && (
         <>
-          <h1 className="text-3xl font-bold text-foreground mb-1">Datele firmei tale</h1>
-          <p className="text-muted-foreground mb-8">
-            Introdu CUI-ul firmei tale, iar noi îți vom extrage datele instant!
-          </p>
+          <div className="mb-6">
+            <p className="text-xs font-semibold uppercase tracking-widest text-accent mb-2">
+              Pasul 1 din 3
+            </p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
+              Identifică-ți firma
+            </h1>
+            <p className="text-muted-foreground text-sm leading-relaxed">
+              Configurează-ți contul în 3 pași simpli. Începem cu identificarea firmei tale — introdu codul unic de înregistrare, iar noi completăm restul automat.
+            </p>
+          </div>
 
           <form onSubmit={handleCuiLookup} className="space-y-5">
             <div>
               <label className="auth-label">
-                CUI-ul firmei <span className="auth-label-required">*</span>
+                Cod unic de identificare (CUI) <span className="auth-label-required">*</span>
               </label>
               <input
                 type="text"
                 value={cui}
                 onChange={(e) => setCui(e.target.value)}
-                placeholder="RO12345678"
+                placeholder="ex: RO12345678"
                 className="auth-input"
                 required
               />
+              <p className="text-xs text-muted-foreground mt-1.5">
+                Poți introduce CUI-ul cu sau fără prefixul „RO".
+              </p>
             </div>
 
-            <div className="pt-4">
+            <div className="pt-2">
               <button
                 type="submit"
                 className="w-full h-12 rounded-xl bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity"
@@ -87,18 +97,18 @@ const SignUp = () => {
               </button>
             </div>
 
-            <div className="flex items-center gap-3 my-2">
+            <div className="flex items-center gap-3 my-1">
               <div className="flex-1 h-px bg-border" />
-              <span className="text-sm text-muted-foreground">sau</span>
+              <span className="text-xs text-muted-foreground">sau</span>
               <div className="flex-1 h-px bg-border" />
             </div>
 
             <button
               type="button"
               onClick={() => { setMode("manual"); setStep(2); }}
-              className="w-full text-center text-sm font-semibold text-foreground underline underline-offset-2 hover:opacity-70 transition-opacity"
+              className="w-full text-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
             >
-              Introdu datele manual
+              Nu am CUI — completez manual
             </button>
           </form>
         </>
