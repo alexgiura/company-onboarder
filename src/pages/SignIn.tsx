@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
-import AuthLogo from "@/components/AuthLogo";
+
 import AuthLayout from "@/components/AuthLayout";
 
 const SignIn = () => {
@@ -17,7 +17,7 @@ const SignIn = () => {
 
   return (
     <AuthLayout>
-      <AuthLogo subtitle="Bine ai revenit!" />
+
 
       <h1 className="text-3xl font-bold text-foreground mb-1">Login</h1>
       <p className="text-muted-foreground mb-8">Introdu datele contului tău.</p>

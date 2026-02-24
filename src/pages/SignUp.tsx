@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
-import AuthLogo from "@/components/AuthLogo";
+
 import AuthLayout from "@/components/AuthLayout";
 import StepProgress from "@/components/StepProgress";
 
@@ -53,7 +53,6 @@ const SignUp = () => {
 
   return (
     <AuthLayout>
-      <AuthLogo subtitle="Bine ai venit!" />
       <StepProgress current={step} total={3} />
 
       {/* STEP 1 - CUI */}
