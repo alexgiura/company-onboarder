@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Eye, EyeOff } from "lucide-react";
-import StepProgress from "@/components/StepProgress";
+import { ArrowRight, Eye, EyeOff, ChevronLeft } from "lucide-react";
 
 const JUDETE = [
   "Alba", "Arad", "Argeș", "Bacău", "Bihor", "Bistrița-Năsăud", "Botoșani",
@@ -16,10 +15,7 @@ const SignUp = () => {
   const [step, setStep] = useState(1);
   const [mode, setMode] = useState<"cui" | "manual">("cui");
 
-  // Step 1
   const [cui, setCui] = useState("");
-
-  // Step 2 - company details
   const [numeFirma, setNumeFirma] = useState("");
   const [cuiManual, setCuiManual] = useState("");
   const [regComert, setRegComert] = useState("");
@@ -27,255 +23,262 @@ const SignUp = () => {
   const [judet, setJudet] = useState("");
   const [localitate, setLocalitate] = useState("");
   const [platitorTva, setPlatitorTva] = useState(false);
-
-  // Step 3 - account
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
-  const handleCuiLookup = (e: React.FormEvent) => {
-    e.preventDefault();
-    setStep(2);
-  };
-
-  const handleCompanySubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setStep(3);
-  };
-
-  const handleAccountSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-  };
+  const handleCuiLookup = (e: React.FormEvent) => { e.preventDefault(); setStep(2); };
+  const handleCompanySubmit = (e: React.FormEvent) => { e.preventDefault(); setStep(3); };
+  const handleAccountSubmit = (e: React.FormEvent) => { e.preventDefault(); };
 
   return (
-    <div className="min-h-screen bg-primary text-primary-foreground flex flex-col">
-      {/* Logo top-left */}
-      <div className="px-6 pt-6">
+    <div className="min-h-screen bg-background flex flex-col">
+      {/* Top bar */}
+      <header className="flex items-center justify-between px-6 sm:px-10 pt-8 pb-4">
         <div className="flex items-center gap-2.5">
           <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M14 2L6 8L14 14L22 8L14 2Z" fill="hsl(var(--accent))" opacity="0.9" />
-            <path d="M14 14L6 20L14 26L22 20L14 14Z" fill="hsl(var(--primary-foreground))" opacity="0.7" />
-            <path d="M14 8L6 14L14 20L22 14L14 8Z" fill="hsl(var(--primary-foreground))" opacity="0.4" />
+            <path d="M14 14L6 20L14 26L22 20L14 14Z" fill="hsl(var(--foreground))" opacity="0.7" />
+            <path d="M14 8L6 14L14 20L22 14L14 8Z" fill="hsl(var(--foreground))" opacity="0.3" />
           </svg>
-          <span className="text-base font-bold tracking-tight text-primary-foreground">Factura</span>
+          <span className="text-base font-bold tracking-tight text-foreground">Factura</span>
+        </div>
+        <Link to="/sign-in" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+          Ai deja cont? <span className="font-semibold text-foreground underline underline-offset-2">Conectează-te</span>
+        </Link>
+      </header>
+
+      {/* Step indicator — thin accent bar */}
+      <div className="px-6 sm:px-10">
+        <div className="max-w-2xl mx-auto flex gap-1.5">
+          {[1, 2, 3].map((s) => (
+            <div
+              key={s}
+              className={`h-1 flex-1 rounded-full transition-all duration-500 ${
+                s < step
+                  ? "bg-accent"
+                  : s === step
+                  ? "bg-accent"
+                  : "bg-border"
+              }`}
+            />
+          ))}
         </div>
       </div>
 
-      {/* Centered content */}
-      <div className="flex-1 flex items-center justify-center px-6 pb-16">
-        <div className="w-full max-w-xl text-center">
+      {/* Main content — vertically centered */}
+      <main className="flex-1 flex items-center justify-center px-6 sm:px-10 pb-16">
+        <div className="w-full max-w-2xl">
 
-          {/* STEP 1 - CUI */}
+          {/* STEP 1 */}
           {step === 1 && (
             <div className="animate-fade-in">
-              <h1 className="text-2xl sm:text-4xl font-bold mb-3 text-primary-foreground">
-                Pentru ce firmă creezi contul Factura?
+              <p className="text-accent font-semibold text-sm tracking-wide uppercase mb-4">
+                Pasul 1 — Identificare
+              </p>
+              <h1 className="text-3xl sm:text-5xl font-extrabold text-foreground leading-tight mb-4">
+                Cu ce firmă
+                <br />
+                <span className="text-accent">lucrezi?</span>
               </h1>
-              <p className="text-primary-foreground/60 text-sm sm:text-base mb-10">
-                Introdu codul fiscal sau denumirea firmei. Vom prelua datele automat.
+              <p className="text-muted-foreground text-base sm:text-lg max-w-md mb-10">
+                Introdu codul fiscal sau denumirea, iar noi completăm datele automat.
               </p>
 
-              <form onSubmit={handleCuiLookup} className="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto">
-                <input
-                  type="text"
-                  value={cui}
-                  onChange={(e) => setCui(e.target.value)}
-                  placeholder="Introdu codul fiscal sau denumirea"
-                  className="flex-1 h-12 px-5 rounded-xl bg-primary-foreground/10 border border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent/50 transition-all"
-                  required
-                />
-                <button
-                  type="submit"
-                  className="h-12 px-8 rounded-xl bg-accent text-accent-foreground font-semibold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity shrink-0"
-                >
-                  Continuă
-                  <ArrowRight size={18} />
-                </button>
+              <form onSubmit={handleCuiLookup} className="space-y-4 max-w-lg">
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={cui}
+                    onChange={(e) => setCui(e.target.value)}
+                    placeholder="Codul fiscal sau denumirea firmei"
+                    className="w-full h-14 pl-5 pr-36 rounded-2xl border-2 border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-accent transition-colors text-base"
+                    required
+                  />
+                  <button
+                    type="submit"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 h-10 px-6 rounded-xl bg-accent text-accent-foreground font-semibold text-sm flex items-center gap-2 hover:opacity-90 transition-opacity"
+                  >
+                    Continuă
+                    <ArrowRight size={16} />
+                  </button>
+                </div>
               </form>
 
-              <div className="mt-6 text-left max-w-lg mx-auto">
-                <p className="text-primary-foreground/40 text-sm">sau</p>
-                <button
-                  type="button"
-                  onClick={() => { setMode("manual"); setStep(2); }}
-                  className="text-sm text-primary-foreground/60 hover:text-primary-foreground transition-colors"
-                >
-                  Sari acest pas și introdu mai târziu codul fiscal
-                </button>
-              </div>
+              <button
+                type="button"
+                onClick={() => { setMode("manual"); setStep(2); }}
+                className="mt-6 text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4 decoration-border hover:decoration-foreground"
+              >
+                Completez manual, fără cod fiscal
+              </button>
             </div>
           )}
 
-          {/* STEP 2 - Company details */}
+          {/* STEP 2 */}
           {step === 2 && (
-            <div className="animate-fade-in text-left max-w-md mx-auto">
-              <StepProgress current={2} total={3} />
-              <h1 className="text-2xl sm:text-3xl font-bold text-primary-foreground mb-2">
-                Datele firmei tale
+            <div className="animate-fade-in">
+              <button
+                type="button"
+                onClick={() => setStep(1)}
+                className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6"
+              >
+                <ChevronLeft size={16} />
+                Înapoi
+              </button>
+
+              <p className="text-accent font-semibold text-sm tracking-wide uppercase mb-4">
+                Pasul 2 — Date firmă
+              </p>
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-foreground leading-tight mb-2">
+                Completează
+                <br />
+                <span className="text-accent">datele firmei.</span>
               </h1>
-              <p className="text-primary-foreground/60 text-sm mb-8">
-                Verifică și completează informațiile companiei.
+              <p className="text-muted-foreground text-base mb-8">
+                Verifică informațiile precompletate și adaugă ce lipsește.
               </p>
 
-              <form onSubmit={handleCompanySubmit} className="space-y-4">
+              <form onSubmit={handleCompanySubmit} className="space-y-4 max-w-lg">
                 <div>
-                  <label className="block text-sm font-medium text-primary-foreground/80 mb-1.5">
-                    Numele firmei <span className="text-accent">*</span>
-                  </label>
+                  <label className="signup-label">Numele firmei <span className="text-accent">*</span></label>
                   <input type="text" value={numeFirma} onChange={(e) => setNumeFirma(e.target.value)}
-                    placeholder="Numele firmei" className="signup-input" required />
+                    placeholder="S.C. Exemplu S.R.L." className="signup-field" required />
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-primary-foreground/80 mb-1.5">
-                      CUI <span className="text-accent">*</span>
-                    </label>
+                    <label className="signup-label">CUI <span className="text-accent">*</span></label>
                     <input type="text" value={cuiManual || cui} onChange={(e) => setCuiManual(e.target.value)}
-                      placeholder="RO12345678" className="signup-input" required />
+                      placeholder="RO12345678" className="signup-field" required />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-primary-foreground/80 mb-1.5">
-                      Reg. comerț
-                    </label>
+                    <label className="signup-label">Reg. comerț</label>
                     <input type="text" value={regComert} onChange={(e) => setRegComert(e.target.value)}
-                      placeholder="J00/000/0000" className="signup-input" />
+                      placeholder="J00/000/0000" className="signup-field" />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-primary-foreground/80 mb-1.5">
-                    Adresă <span className="text-accent">*</span>
-                  </label>
+                  <label className="signup-label">Adresă <span className="text-accent">*</span></label>
                   <input type="text" value={adresa} onChange={(e) => setAdresa(e.target.value)}
-                    placeholder="Strada, nr., bloc, etc." className="signup-input" required />
+                    placeholder="Strada, nr., bloc, etc." className="signup-field" required />
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-primary-foreground/80 mb-1.5">
-                      Județ <span className="text-accent">*</span>
-                    </label>
+                    <label className="signup-label">Județ <span className="text-accent">*</span></label>
                     <select value={judet} onChange={(e) => setJudet(e.target.value)}
-                      className="signup-input appearance-none cursor-pointer" required>
-                      <option value="">Selectează județul</option>
+                      className="signup-field appearance-none cursor-pointer" required>
+                      <option value="">Selectează</option>
                       {JUDETE.map((j) => <option key={j} value={j}>{j}</option>)}
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-primary-foreground/80 mb-1.5">
-                      Localitate
-                    </label>
+                    <label className="signup-label">Localitate</label>
                     <input type="text" value={localitate} onChange={(e) => setLocalitate(e.target.value)}
-                      placeholder="ex: Oradea" className="signup-input" />
+                      placeholder="ex: Oradea" className="signup-field" />
                   </div>
                 </div>
 
                 <div className="flex items-center gap-4 pt-1">
-                  <span className="text-sm font-medium text-primary-foreground/80">
+                  <span className="text-sm font-medium text-foreground">
                     Plătitor TVA? <span className="text-accent">*</span>
                   </span>
                   <label className="flex items-center gap-1.5 cursor-pointer">
                     <input type="radio" name="tva" checked={platitorTva} onChange={() => setPlatitorTva(true)}
                       className="accent-accent" />
-                    <span className="text-sm text-primary-foreground">Da</span>
+                    <span className="text-sm">Da</span>
                   </label>
                   <label className="flex items-center gap-1.5 cursor-pointer">
                     <input type="radio" name="tva" checked={!platitorTva} onChange={() => setPlatitorTva(false)}
                       className="accent-accent" />
-                    <span className="text-sm text-primary-foreground">Nu</span>
+                    <span className="text-sm">Nu</span>
                   </label>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3 pt-4">
-                  <button type="button" onClick={() => setStep(1)}
-                    className="h-12 rounded-xl border border-primary-foreground/20 text-primary-foreground font-semibold hover:bg-primary-foreground/5 transition-colors">
-                    Înapoi
-                  </button>
+                <div className="pt-4">
                   <button type="submit"
-                    className="h-12 rounded-xl bg-accent text-accent-foreground font-semibold hover:opacity-90 transition-opacity">
+                    className="h-12 px-10 rounded-xl bg-accent text-accent-foreground font-semibold flex items-center gap-2 hover:opacity-90 transition-opacity">
                     Continuă
+                    <ArrowRight size={16} />
                   </button>
                 </div>
               </form>
             </div>
           )}
 
-          {/* STEP 3 - Account */}
+          {/* STEP 3 */}
           {step === 3 && (
-            <div className="animate-fade-in text-left max-w-md mx-auto">
-              <StepProgress current={3} total={3} />
-              <h1 className="text-2xl sm:text-3xl font-bold text-primary-foreground mb-2">
-                Creează-ți contul
+            <div className="animate-fade-in">
+              <button
+                type="button"
+                onClick={() => setStep(2)}
+                className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6"
+              >
+                <ChevronLeft size={16} />
+                Înapoi
+              </button>
+
+              <p className="text-accent font-semibold text-sm tracking-wide uppercase mb-4">
+                Pasul 3 — Cont
+              </p>
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-foreground leading-tight mb-2">
+                Ultimul pas.
+                <br />
+                <span className="text-accent">Creează-ți contul.</span>
               </h1>
-              <p className="text-primary-foreground/60 text-sm mb-8">
-                Ultimul pas — setează credențialele de acces.
+              <p className="text-muted-foreground text-base mb-8">
+                Setează adresa de e-mail și o parolă pentru acces.
               </p>
 
-              <form onSubmit={handleAccountSubmit} className="space-y-5">
+              <form onSubmit={handleAccountSubmit} className="space-y-5 max-w-lg">
                 <div>
-                  <label className="block text-sm font-medium text-primary-foreground/80 mb-1.5">
-                    E-mail <span className="text-accent">*</span>
-                  </label>
+                  <label className="signup-label">E-mail <span className="text-accent">*</span></label>
                   <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-                    placeholder="exemplu@firma.ro" className="signup-input" required />
+                    placeholder="exemplu@firma.ro" className="signup-field" required />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-primary-foreground/80 mb-1.5">
-                    Parolă <span className="text-accent">*</span>
-                  </label>
+                  <label className="signup-label">Parolă <span className="text-accent">*</span></label>
                   <div className="relative">
                     <input type={showPassword ? "text" : "password"} value={password}
                       onChange={(e) => setPassword(e.target.value)} placeholder="Minim 8 caractere"
-                      className="signup-input pr-12" required minLength={8} />
+                      className="signup-field pr-12" required minLength={8} />
                     <button type="button" onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-primary-foreground/40 hover:text-primary-foreground transition-colors">
-                      {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors">
+                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                     </button>
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-primary-foreground/80 mb-1.5">
-                    Confirmă parola <span className="text-accent">*</span>
-                  </label>
+                  <label className="signup-label">Confirmă parola <span className="text-accent">*</span></label>
                   <div className="relative">
                     <input type={showConfirm ? "text" : "password"} value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Repetă parola"
-                      className="signup-input pr-12" required minLength={8} />
+                      className="signup-field pr-12" required minLength={8} />
                     <button type="button" onClick={() => setShowConfirm(!showConfirm)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-primary-foreground/40 hover:text-primary-foreground transition-colors">
-                      {showConfirm ? <EyeOff size={20} /> : <Eye size={20} />}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors">
+                      {showConfirm ? <EyeOff size={18} /> : <Eye size={18} />}
                     </button>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3 pt-2">
-                  <button type="button" onClick={() => setStep(2)}
-                    className="h-12 rounded-xl border border-primary-foreground/20 text-primary-foreground font-semibold hover:bg-primary-foreground/5 transition-colors">
-                    Înapoi
-                  </button>
+                <div className="pt-2">
                   <button type="submit"
-                    className="h-12 rounded-xl bg-accent text-accent-foreground font-semibold hover:opacity-90 transition-opacity">
+                    className="h-12 px-10 rounded-xl bg-accent text-accent-foreground font-semibold flex items-center gap-2 hover:opacity-90 transition-opacity">
                     Creează cont
+                    <ArrowRight size={16} />
                   </button>
                 </div>
               </form>
             </div>
           )}
-
-          {/* Footer link */}
-          <p className="text-sm text-primary-foreground/40 mt-10">
-            Deja ai un cont?{" "}
-            <Link to="/sign-in" className="font-semibold text-primary-foreground/70 underline underline-offset-2 hover:text-primary-foreground transition-colors">
-              Înapoi la login
-            </Link>
-          </p>
         </div>
-      </div>
+      </main>
     </div>
   );
 };
