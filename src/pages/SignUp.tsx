@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Eye, EyeOff } from "lucide-react";
-
-import AuthLayout from "@/components/AuthLayout";
+import { ArrowRight, Eye, EyeOff } from "lucide-react";
 import StepProgress from "@/components/StepProgress";
 
 const JUDETE = [
@@ -52,298 +50,233 @@ const SignUp = () => {
   };
 
   return (
-    <AuthLayout>
-      <StepProgress current={step} total={3} />
+    <div className="min-h-screen bg-primary text-primary-foreground flex flex-col">
+      {/* Logo top-left */}
+      <div className="px-6 pt-6">
+        <div className="flex items-center gap-2.5">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M14 2L6 8L14 14L22 8L14 2Z" fill="hsl(var(--accent))" opacity="0.9" />
+            <path d="M14 14L6 20L14 26L22 20L14 14Z" fill="hsl(var(--primary-foreground))" opacity="0.7" />
+            <path d="M14 8L6 14L14 20L22 14L14 8Z" fill="hsl(var(--primary-foreground))" opacity="0.4" />
+          </svg>
+          <span className="text-base font-bold tracking-tight text-primary-foreground">Factura</span>
+        </div>
+      </div>
 
-      {/* STEP 1 - CUI */}
-      {step === 1 && (
-        <>
-          <div className="mb-6">
-            <p className="text-xs font-semibold uppercase tracking-widest text-accent mb-2">
-              Pasul 1 din 3
-            </p>
-            <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
-              Identifică-ți firma
-            </h1>
-            <p className="text-muted-foreground text-sm leading-relaxed">
-              Configurează-ți contul în 3 pași simpli. Începem cu identificarea firmei tale — introdu codul unic de înregistrare, iar noi completăm restul automat.
-            </p>
-          </div>
+      {/* Centered content */}
+      <div className="flex-1 flex items-center justify-center px-6 pb-16">
+        <div className="w-full max-w-xl text-center">
 
-          <form onSubmit={handleCuiLookup} className="space-y-5">
-            <div>
-              <label className="auth-label">
-                Cod unic de identificare (CUI) <span className="auth-label-required">*</span>
-              </label>
-              <input
-                type="text"
-                value={cui}
-                onChange={(e) => setCui(e.target.value)}
-                placeholder="ex: RO12345678"
-                className="auth-input"
-                required
-              />
-              <p className="text-xs text-muted-foreground mt-1.5">
-                Poți introduce CUI-ul cu sau fără prefixul „RO".
+          {/* STEP 1 - CUI */}
+          {step === 1 && (
+            <div className="animate-fade-in">
+              <h1 className="text-2xl sm:text-4xl font-bold mb-3 text-primary-foreground">
+                Pentru ce firmă creezi contul Factura?
+              </h1>
+              <p className="text-primary-foreground/60 text-sm sm:text-base mb-10">
+                Introdu codul fiscal sau denumirea firmei. Vom prelua datele automat.
               </p>
-            </div>
 
-            <div className="pt-2">
-              <button
-                type="submit"
-                className="w-full h-12 rounded-xl bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity"
-              >
-                Continuă
-              </button>
-            </div>
-
-            <div className="flex items-center gap-3 my-1">
-              <div className="flex-1 h-px bg-border" />
-              <span className="text-xs text-muted-foreground">sau</span>
-              <div className="flex-1 h-px bg-border" />
-            </div>
-
-            <button
-              type="button"
-              onClick={() => { setMode("manual"); setStep(2); }}
-              className="w-full text-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Nu am CUI — completez manual
-            </button>
-          </form>
-        </>
-      )}
-
-      {/* STEP 2 - Company details */}
-      {step === 2 && (
-        <>
-          <h1 className="text-3xl font-bold text-foreground mb-1">Datele firmei tale</h1>
-          <p className="text-muted-foreground mb-8">Introdu datele companiei tale.</p>
-
-          <form onSubmit={handleCompanySubmit} className="space-y-4">
-            <div>
-              <label className="auth-label">
-                Numele firmei <span className="auth-label-required">*</span>
-              </label>
-              <input
-                type="text"
-                value={numeFirma}
-                onChange={(e) => setNumeFirma(e.target.value)}
-                placeholder="Numele firmei"
-                className="auth-input"
-                required
-              />
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="auth-label">
-                  CUI <span className="auth-label-required">*</span>
-                </label>
+              <form onSubmit={handleCuiLookup} className="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto">
                 <input
                   type="text"
-                  value={cuiManual || cui}
-                  onChange={(e) => setCuiManual(e.target.value)}
-                  placeholder="RO12345678"
-                  className="auth-input"
+                  value={cui}
+                  onChange={(e) => setCui(e.target.value)}
+                  placeholder="Introdu codul fiscal sau denumirea"
+                  className="flex-1 h-12 px-5 rounded-xl bg-primary-foreground/10 border border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent/50 transition-all"
                   required
-                />
-              </div>
-              <div>
-                <label className="auth-label">Reg comerț (opțional)</label>
-                <input
-                  type="text"
-                  value={regComert}
-                  onChange={(e) => setRegComert(e.target.value)}
-                  placeholder="Reg comerț"
-                  className="auth-input"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="auth-label">
-                Adresă <span className="auth-label-required">*</span>
-              </label>
-              <input
-                type="text"
-                value={adresa}
-                onChange={(e) => setAdresa(e.target.value)}
-                placeholder="Adresă"
-                className="auth-input"
-                required
-              />
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="auth-label">
-                  Județ <span className="auth-label-required">*</span>
-                </label>
-                <select
-                  value={judet}
-                  onChange={(e) => setJudet(e.target.value)}
-                  className="auth-input appearance-none cursor-pointer"
-                  required
-                >
-                  <option value="">Județul sediului</option>
-                  {JUDETE.map((j) => (
-                    <option key={j} value={j}>{j}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="auth-label">Localitate (opțional)</label>
-                <input
-                  type="text"
-                  value={localitate}
-                  onChange={(e) => setLocalitate(e.target.value)}
-                  placeholder="exemplu: Oradea"
-                  className="auth-input"
-                />
-              </div>
-            </div>
-
-            <div className="flex items-center gap-4 pt-1">
-              <span className="text-sm font-medium text-foreground">
-                Ești plătitor de TVA? <span className="auth-label-required">*</span>
-              </span>
-              <label className="flex items-center gap-1.5 cursor-pointer">
-                <input
-                  type="radio"
-                  name="tva"
-                  checked={platitorTva}
-                  onChange={() => setPlatitorTva(true)}
-                  className="accent-primary"
-                />
-                <span className="text-sm">Da</span>
-              </label>
-              <label className="flex items-center gap-1.5 cursor-pointer">
-                <input
-                  type="radio"
-                  name="tva"
-                  checked={!platitorTva}
-                  onChange={() => setPlatitorTva(false)}
-                  className="accent-primary"
-                />
-                <span className="text-sm">Nu</span>
-              </label>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3 pt-4">
-              <button
-                type="button"
-                onClick={() => setStep(1)}
-                className="h-12 rounded-xl border border-border bg-card text-foreground font-semibold hover:bg-secondary transition-colors"
-              >
-                Înapoi
-              </button>
-              <button
-                type="submit"
-                className="h-12 rounded-xl bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity"
-              >
-                Continuă
-              </button>
-            </div>
-          </form>
-        </>
-      )}
-
-      {/* STEP 3 - Account */}
-      {step === 3 && (
-        <>
-          <h1 className="text-3xl font-bold text-foreground mb-1">Creează contul</h1>
-          <p className="text-muted-foreground mb-8">Introdu datele pentru contul tău.</p>
-
-          <form onSubmit={handleAccountSubmit} className="space-y-5">
-            <div>
-              <label className="auth-label">
-                E-mail <span className="auth-label-required">*</span>
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Introdu e-mailul tău"
-                className="auth-input"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="auth-label">
-                Parolă <span className="auth-label-required">*</span>
-              </label>
-              <div className="relative">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Minim 8 caractere"
-                  className="auth-input pr-12"
-                  required
-                  minLength={8}
                 />
                 <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  type="submit"
+                  className="h-12 px-8 rounded-xl bg-accent text-accent-foreground font-semibold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity shrink-0"
                 >
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  Continuă
+                  <ArrowRight size={18} />
+                </button>
+              </form>
+
+              <div className="mt-6 text-left max-w-lg mx-auto">
+                <p className="text-primary-foreground/40 text-sm">sau</p>
+                <button
+                  type="button"
+                  onClick={() => { setMode("manual"); setStep(2); }}
+                  className="text-sm text-primary-foreground/60 hover:text-primary-foreground transition-colors"
+                >
+                  Sari acest pas și introdu mai târziu codul fiscal
                 </button>
               </div>
             </div>
+          )}
 
-            <div>
-              <label className="auth-label">
-                Confirmă parola <span className="auth-label-required">*</span>
-              </label>
-              <div className="relative">
-                <input
-                  type={showConfirm ? "text" : "password"}
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="Repetă parola"
-                  className="auth-input pr-12"
-                  required
-                  minLength={8}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirm(!showConfirm)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  {showConfirm ? <EyeOff size={20} /> : <Eye size={20} />}
-                </button>
-              </div>
+          {/* STEP 2 - Company details */}
+          {step === 2 && (
+            <div className="animate-fade-in text-left max-w-md mx-auto">
+              <StepProgress current={2} total={3} />
+              <h1 className="text-2xl sm:text-3xl font-bold text-primary-foreground mb-2">
+                Datele firmei tale
+              </h1>
+              <p className="text-primary-foreground/60 text-sm mb-8">
+                Verifică și completează informațiile companiei.
+              </p>
+
+              <form onSubmit={handleCompanySubmit} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-primary-foreground/80 mb-1.5">
+                    Numele firmei <span className="text-accent">*</span>
+                  </label>
+                  <input type="text" value={numeFirma} onChange={(e) => setNumeFirma(e.target.value)}
+                    placeholder="Numele firmei" className="signup-input" required />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-primary-foreground/80 mb-1.5">
+                      CUI <span className="text-accent">*</span>
+                    </label>
+                    <input type="text" value={cuiManual || cui} onChange={(e) => setCuiManual(e.target.value)}
+                      placeholder="RO12345678" className="signup-input" required />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-primary-foreground/80 mb-1.5">
+                      Reg. comerț
+                    </label>
+                    <input type="text" value={regComert} onChange={(e) => setRegComert(e.target.value)}
+                      placeholder="J00/000/0000" className="signup-input" />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-primary-foreground/80 mb-1.5">
+                    Adresă <span className="text-accent">*</span>
+                  </label>
+                  <input type="text" value={adresa} onChange={(e) => setAdresa(e.target.value)}
+                    placeholder="Strada, nr., bloc, etc." className="signup-input" required />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-primary-foreground/80 mb-1.5">
+                      Județ <span className="text-accent">*</span>
+                    </label>
+                    <select value={judet} onChange={(e) => setJudet(e.target.value)}
+                      className="signup-input appearance-none cursor-pointer" required>
+                      <option value="">Selectează județul</option>
+                      {JUDETE.map((j) => <option key={j} value={j}>{j}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-primary-foreground/80 mb-1.5">
+                      Localitate
+                    </label>
+                    <input type="text" value={localitate} onChange={(e) => setLocalitate(e.target.value)}
+                      placeholder="ex: Oradea" className="signup-input" />
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-4 pt-1">
+                  <span className="text-sm font-medium text-primary-foreground/80">
+                    Plătitor TVA? <span className="text-accent">*</span>
+                  </span>
+                  <label className="flex items-center gap-1.5 cursor-pointer">
+                    <input type="radio" name="tva" checked={platitorTva} onChange={() => setPlatitorTva(true)}
+                      className="accent-accent" />
+                    <span className="text-sm text-primary-foreground">Da</span>
+                  </label>
+                  <label className="flex items-center gap-1.5 cursor-pointer">
+                    <input type="radio" name="tva" checked={!platitorTva} onChange={() => setPlatitorTva(false)}
+                      className="accent-accent" />
+                    <span className="text-sm text-primary-foreground">Nu</span>
+                  </label>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 pt-4">
+                  <button type="button" onClick={() => setStep(1)}
+                    className="h-12 rounded-xl border border-primary-foreground/20 text-primary-foreground font-semibold hover:bg-primary-foreground/5 transition-colors">
+                    Înapoi
+                  </button>
+                  <button type="submit"
+                    className="h-12 rounded-xl bg-accent text-accent-foreground font-semibold hover:opacity-90 transition-opacity">
+                    Continuă
+                  </button>
+                </div>
+              </form>
             </div>
+          )}
 
-            <div className="grid grid-cols-2 gap-3 pt-2">
-              <button
-                type="button"
-                onClick={() => setStep(2)}
-                className="h-12 rounded-xl border border-border bg-card text-foreground font-semibold hover:bg-secondary transition-colors"
-              >
-                Înapoi
-              </button>
-              <button
-                type="submit"
-                className="h-12 rounded-xl bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity"
-              >
-                Creează cont
-              </button>
+          {/* STEP 3 - Account */}
+          {step === 3 && (
+            <div className="animate-fade-in text-left max-w-md mx-auto">
+              <StepProgress current={3} total={3} />
+              <h1 className="text-2xl sm:text-3xl font-bold text-primary-foreground mb-2">
+                Creează-ți contul
+              </h1>
+              <p className="text-primary-foreground/60 text-sm mb-8">
+                Ultimul pas — setează credențialele de acces.
+              </p>
+
+              <form onSubmit={handleAccountSubmit} className="space-y-5">
+                <div>
+                  <label className="block text-sm font-medium text-primary-foreground/80 mb-1.5">
+                    E-mail <span className="text-accent">*</span>
+                  </label>
+                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
+                    placeholder="exemplu@firma.ro" className="signup-input" required />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-primary-foreground/80 mb-1.5">
+                    Parolă <span className="text-accent">*</span>
+                  </label>
+                  <div className="relative">
+                    <input type={showPassword ? "text" : "password"} value={password}
+                      onChange={(e) => setPassword(e.target.value)} placeholder="Minim 8 caractere"
+                      className="signup-input pr-12" required minLength={8} />
+                    <button type="button" onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-primary-foreground/40 hover:text-primary-foreground transition-colors">
+                      {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-primary-foreground/80 mb-1.5">
+                    Confirmă parola <span className="text-accent">*</span>
+                  </label>
+                  <div className="relative">
+                    <input type={showConfirm ? "text" : "password"} value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Repetă parola"
+                      className="signup-input pr-12" required minLength={8} />
+                    <button type="button" onClick={() => setShowConfirm(!showConfirm)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-primary-foreground/40 hover:text-primary-foreground transition-colors">
+                      {showConfirm ? <EyeOff size={20} /> : <Eye size={20} />}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 pt-2">
+                  <button type="button" onClick={() => setStep(2)}
+                    className="h-12 rounded-xl border border-primary-foreground/20 text-primary-foreground font-semibold hover:bg-primary-foreground/5 transition-colors">
+                    Înapoi
+                  </button>
+                  <button type="submit"
+                    className="h-12 rounded-xl bg-accent text-accent-foreground font-semibold hover:opacity-90 transition-opacity">
+                    Creează cont
+                  </button>
+                </div>
+              </form>
             </div>
-          </form>
-        </>
-      )}
+          )}
 
-      <p className="text-center text-sm text-muted-foreground mt-6">
-        Deja ai un cont?{" "}
-        <Link to="/sign-in" className="font-semibold text-foreground underline underline-offset-2 hover:opacity-70 transition-opacity">
-          Înapoi la login
-        </Link>
-      </p>
-    </AuthLayout>
+          {/* Footer link */}
+          <p className="text-sm text-primary-foreground/40 mt-10">
+            Deja ai un cont?{" "}
+            <Link to="/sign-in" className="font-semibold text-primary-foreground/70 underline underline-offset-2 hover:text-primary-foreground transition-colors">
+              Înapoi la login
+            </Link>
+          </p>
+        </div>
+      </div>
+    </div>
   );
 };
 
