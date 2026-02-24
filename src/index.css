@@ -121,4 +121,8 @@
   .auth-label-required {
     @apply text-accent ml-0.5;
   }
+
+  .signup-input {
+    @apply w-full h-12 px-4 rounded-xl bg-primary-foreground/10 border border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent/50 transition-all;
+  }
 }
